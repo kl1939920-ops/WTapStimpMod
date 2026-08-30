@@ -1,13 +1,36 @@
 plugins {
-    id 'net.minecraftforge.gradle' version '6.0-SNAPSHOT'
+    id 'java'
 }
 
 version = "1.0.0"
 group = "com.example.examplemod"
 archivesBaseName = "wtapstimp"
 
-minecraft {
-    version = "1.8.9-11.15.1.2318"
-    runDir = "run"
-    mappings = "stable_22"
+repositories {
+    mavenCentral()
+    maven { url 'https://minecraft.net' }
+    maven { url 'https://spongepowered.org' }
+}
+
+dependencies {
+    // Librerías esenciales de la 1.8.9 para que compile sin errores
+    implementation 'net.minecraft:launchwrapper:1.12'
+    implementation 'org.lwjgl.lwjgl:lwjgl:2.9.4-nightly-20150209'
+    implementation 'org.apache.logging.log4j:log4j-core:2.0-beta9'
+}
+
+sourceSets {
+    main {
+        java { srcDirs = ['src/main/java'] }
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+            'ModSide': 'CLIENT',
+            'ModType': 'FMLMod',
+            'FMLCorePluginContainsFMLMod': 'true'
+        )
+    }
 }
