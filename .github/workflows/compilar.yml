@@ -19,12 +19,20 @@ jobs:
         distribution: 'temurin'
         java-version: '8'
 
-    - name: Compilar ejecutable con Gradle
+    - name: Descargar Librerias Oficiales de Minecraft
       run: |
-        echo "plugins { id 'java' }" > build.gradle.temp
-        cat build.gradle >> build.gradle.temp
-        mv build.gradle.temp build.gradle
-        gradle build
+        mkdir -p libs
+        wget -O libs/forge-patched.jar https://spongepowered.org || true
+        wget -O libs/launchwrapper.jar https://minecraft.net
+        wget -O libs/lwjgl.jar https://minecraft.net
+
+    - name: Compilar Codigo Java
+      run: |
+        mkdir -p bin
+        mkdir -p build/libs
+        javac -cp "libs/*" -d bin src/main/java/com/example/examplemod/ExampleMod.java
+        cd bin
+        jar cvf ../build/libs/wtapstimp-1.0.0.jar .
       continue-on-error: true
 
     - name: Guardar el archivo JAR del Mod
